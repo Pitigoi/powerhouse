@@ -1,147 +1,178 @@
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include <stdio.h>
 #include <string.h>
 
-// struct meminf{
 
-// };
+typedef struct {
+	int id;
+	char name[100];
+	float freq;
+	int cachesize;
+} cpu;
 
-// char* mem(){
-// return NULL;
-// }
+cpu cpuinfo()
+{
+	/*Intel Low End CPU (Core i3) 55 to 73 W
+	Intel Mid End CPU (Core i5) 73 to 95 W
+	Intel High End CPU (Core i7) 77 to 95 W
+	Intel Top End CPU (Core i7-E) 130 to 150 W
+	AMD Low End CPU (2 cores) 65 to 95 W
+	AMD Mid End CPU (4 cores) 65 to 125 W
+	AMD High End CPU (8 cores) 95 to 125 W	*/
+  	FILE* in =fopen("/proc/cpuinfo","r");
+  	
+	cpu out;
+	
+	char a[100],b[100];
+	fgets(a,100,in);
+	sscanf(a,"processor\t: %d",&out.id);
 
+	for(int i=0;i<4;i++)
+    	fgets(a,100,in);
+  	a[strlen(a)-1]='\0';
+	strcpy(out.name,a+13);
 
-int so_fopen(const char* pathname, const char* mode) {
-	int fd, flags;
-	mode_t mode2 = S_IRWXU | S_IRWXG | S_IRWXO;
-	if (strcmp(mode, "r") == 0)
-	{
-		flags = O_RDONLY;
-
-	}
-	else if (strcmp(mode, "r+") == 0)
-	{
-		flags = O_RDWR | O_CREAT;
-	}
-	else if (strcmp(mode, "w") == 0)
-	{
-		flags = O_WRONLY | O_CREAT;
-
-	}
-	else if (strcmp(mode, "w+") == 0)
-	{
-		flags = O_RDWR | O_CREAT;
-
-	}
-	else if (strcmp(mode, "a") == 0)
-	{
-		flags = O_WRONLY | O_CREAT;
-
-	}
-	else if (strcmp(mode, "a+") == 0)
-	{
-		flags = O_RDWR | O_CREAT;
-
-	}
-	else return -1;
-	if (flags & O_CREAT)
-		fd = open(pathname, flags, mode2);
-	else fd = open(pathname, flags);
-
-	return fd;
-	//r r+ w w+ a a+
-	//O_RDONLY, O_WRONLY, or O_RDWR
+  	for(int i=0;i<2;i++)
+    	fgets(a,100,in);
+  	
+	sscanf(a,"cpu MHz\t\t: %f",&out.freq);
+    fgets(a,100,in);
+  	
+	sscanf(a,"cache size\t: %d",&out.cachesize);
+  	fclose(in);
+	return out;
 }
 
-int so_fclose(int stream) {
-	return close((stream));
-}
 
-int so_fgetc(int stream) {
-	char e;
-	int bytesread = read(stream, &e, 1);
-	if (bytesread == 1)
-		return -1;
-	return (int)e;
-}
+void mboardinfo(){
+	/*Regular Motherboard 25 to 40 W
+	High End Motherboard 45 to 80 W
 
-char* so_getline(int fd){
-    char *buf;
-//    buf=(char*) malloc(200);
-    char a=(char) so_fgetc(fd);
-//    int size=0;
-//     do{
-//         buf[size]=a;
-//         size++;
-//         a=(char) so_fgetc(fd);
-//     }while(a!='\n');
-//     buf[size-1]=0;
-    return buf;
-}
-
-char* so_strchr(char* arr,char chr){
-    int n=strlen(arr);
-    for(int i=0;i<n;i++)
-    {
-        if(arr[i]==chr)
-            return arr+i;
-    }
-    return NULL;
-}
-
-void so_strcpy(char* dst,char* src){
-    for(int i=0;i<strlen(src);i++)
-	{
-		dst[i]=src[i];
-	}
-}
-
-size_t so_fwrite(const void* ptr, size_t size, size_t nmemb, int stream) {
-	int byteswritten = 0;
-	for (int count = 0; count < nmemb; count++)
-		byteswritten += pwrite(stream, ptr, size, size * count);
-
-	return byteswritten;
+	Factors that affect motherboard power consumption: number of power phases, type of voltage regulator, integrated chipsets and modules (e.g. on-board sound, on-board Wi-Fi, add-on USB connectors, add-on SATA connectors etc.) and BIOS power saving features.
+	*/
+	printf("");
 }
 
 typedef struct {
-    int id;//line 0
-    char* name;//line 5
-    float mhz;//ln 7
-    int cache;//ln8
-} cpuinf;
+	int total;
+	char name[100];
+	float freq;
+	int cachesize;
+	int count;
+} mem;
 
-cpuinf cpu(){
-    int fd=so_fopen("/proc/cpuinfo","r");
-    
-    cpuinf out;
-	//char* a=so_getline(fd);
-	// free(a);
-	// a=so_getline(fd);
-	// free(a);
-	// a=so_getline(fd);
-	// free(a);
-	// a=so_getline(fd);
-	// free(a);
-	// a=so_getline(fd);
-	out.name=malloc(200);
-	//so_strcpy(out.name,a);
-	// free(a);
-	out.name[0]=so_fgetc(fd);
-	out.name[1]='\0';
+mem meminfo()
+{
+	/*DDR1 RAM (2.5 Volts) 4 to 5.5 W
+	DDR2 RAM (1.8 Volts) 3 to 4.5 W
+	DDR3 RAM (1.5 Volts) 2 to 3 W
 
+	A higher clock speed will also lead to higher power consumption (e.g. DDR3 RAM running at 2,133 MHz will use more power than DDR3 RAM at 1,600 MHz).
 
-    so_fclose(fd);
+	Interestingly the amount of RAM has little or no effect on power consumption of PC components. A stick of 4 GB DDR3 RAM will draw about the same amount of power as a stick of 8 GB DDR3 RAM (assuming that they have the same clock speed).
+	*/
+	mem out;
+
+  	FILE* in =fopen("/proc/meminfo","r");
+  	char a[100],b[100];
+	fgets(a,100,in);
+	sscanf(a,"MemTotal:\t\t%d",&out.total);
+  	fclose(in);
+	return out;
 }
 
-int main()
+#include <unistd.h>
+#include <stdlib.h>
+
+mem meminfo2()
 {
-    cpuinf a = cpu();
-	//so_fwrite(&a.id,1,sizeof(int),1);
-	//so_fwrite(&a.name,1,sizeof(int),1);
-	free(a.name);
-    return 0;
-}B��)��牴證⑄䐈
+	/*DDR1 RAM (2.5 Volts) 4 to 5.5 W
+	DDR2 RAM (1.8 Volts) 3 to 4.5 W
+	DDR3 RAM (1.5 Volts) 2 to 3 W
+
+	A higher clock speed will also lead to higher power consumption (e.g. DDR3 RAM running at 2,133 MHz will use more power than DDR3 RAM at 1,600 MHz).
+
+	Interestingly the amount of RAM has little or no effect on power consumption of PC components. A stick of 4 GB DDR3 RAM will draw about the same amount of power as a stick of 8 GB DDR3 RAM (assuming that they have the same clock speed).
+	*/
+	mem out;
+
+	int fd[2];
+	if(	pipe(fd)<0)
+		printf("error : pipe\n");
+	
+	if(0==0)
+	{
+		int pid = fork();
+		switch (pid) {
+			case -1: /* fork failed */
+				printf("error : pipe\n");
+				exit(EXIT_FAILURE);
+			case 0: /* child process */
+				close(fd[0]);
+				dup2(fd[1],1);
+
+				execl("/bin/sh", "sh", "-c", "dmidecode --type memory", (char *) NULL);
+			default: /* parent process */
+				close(fd[1]);
+
+				char readingbuf[2]="a";
+				char childout[512]="";
+				while(read(fd[0],readingbuf,1)>0)
+				{
+					strcat(childout,readingbuf);
+					//write(1,readingbuf,1);
+				}
+				close(fd[0]);
+				int status;
+				wait(pid,&status);
+
+
+				printf("Created process with pid %d\n%s\n", pid,childout);
+		}
+		//pid = wait(&status);
+	}
+	return out;
+}
+
+void function_template()
+{
+	
+
+	int fd[2];
+	if(	pipe(fd)<0)
+		printf("error : pipe\n");
+	
+	if(0==0)
+	{
+		int pid = fork();
+		switch (pid) {
+			case -1: 
+				printf("error : pipe\n");
+				exit(EXIT_FAILURE);
+			case 0: 
+				close(fd[0]);
+				dup2(fd[1],1);
+				execl("/bin/sh", "sh", "-c", "echo \"proba\"", (char *) NULL);
+			default: 
+				close(fd[1]);
+
+				char readingbuf[2]="a";
+				char childout[512]="";
+				while(read(fd[0],readingbuf,1)>0)
+				{
+					strcat(childout,readingbuf);
+				}
+				close(fd[0]);
+				int status;
+				wait(pid,&status);
+				printf("Created process with pid %d\n%s\n", pid,childout);
+		}
+	}
+}
+
+void main()
+{
+	cpu  a = cpuinfo();
+	//printf("%d %s\n%f %d\n",a.id,a.name,a.freq,a.cachesize);
+	mem b = meminfo2();
+	//printf("%d kbs\n",b.total);
+}
