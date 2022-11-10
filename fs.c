@@ -133,7 +133,7 @@ mem meminfo2()
 	return out;
 }
 
-void function_template()
+void function_template(const char* command)
 {
 	
 
@@ -151,7 +151,8 @@ void function_template()
 			case 0: 
 				close(fd[0]);
 				dup2(fd[1],1);
-				execl("/bin/sh", "sh", "-c", "echo \"proba\"", (char *) NULL);
+				//execl("/bin/sh", "sh", "-c", "echo \"proba\"", (char *) NULL);
+				execl("/bin/sh", "sh", "-c", command, (char *) NULL);
 			default: 
 				close(fd[1]);
 
