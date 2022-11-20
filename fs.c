@@ -141,32 +141,49 @@ void function_template(const char* command)
 	if(	pipe(fd)<0)
 		printf("error : pipe\n");
 	
-	if(0==0)
-	{
-		int pid = fork();
-		switch (pid) {
-			case -1: 
-				printf("error : pipe\n");
-				exit(EXIT_FAILURE);
-			case 0: 
-				close(fd[0]);
-				dup2(fd[1],1);
-				//execl("/bin/sh", "sh", "-c", "echo \"proba\"", (char *) NULL);
-				execl("/bin/sh", "sh", "-c", command, (char *) NULL);
-			default: 
-				close(fd[1]);
+	int pid = fork();
+	switch (pid) {	
+		case -1: 
+			printf("error : pipe\n");
+			exit(EXIT_FAILURE);
+		case 0: 
+			close(fd[0]);
+			dup2(fd[1],1);
+			//execl("/bin/sh", "sh", "-c", "echo \"proba\"", (char *) NULL);
+			execl("/bin/sh", "sh", "-c", command, (char *) NULL);
+		default: 
+			close(fd[1]);
 
-				char readingbuf[2]="a";
-				char childout[512]="";
-				while(read(fd[0],readingbuf,1)>0)
-				{
-					strcat(childout,readingbuf);
-				}
-				close(fd[0]);
-				int status;
-				wait(pid,&status);
-				printf("Created process with pid %d\n%s\n", pid,childout);
-		}
+			char readingbuf[2]="a";
+			char childout[512]="";
+			while(read(fd[0],readingbuf,1)>0)
+			{
+				strcat(childout,readingbuf);
+			}
+			close(fd[0]);
+			int status;
+			wait(pid,&status);
+			printf("Created process with pid %d\n%s\n", pid,childout);
+	}
+	
+}
+
+void pipe_to_file(const char* command,const char* path)
+{
+	int pid = fork();
+	switch (pid) {
+		case -1:
+			printf("error : fork\n");
+			exit(EXIT_FAILURE);
+		case 0:
+			int out = open(path, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
+			dup2(out, 1);
+			//execl("/bin/sh", "sh", "-c", "echo \"proba\"", (char *) NULL);
+			execl("/bin/sh", "sh", "-c", command, (char*)NULL);
+		default:
+			int status;
+			wait(pid, &status);
+			printf("Proces cu out redirectat la %s/n", path);
 	}
 }
 
