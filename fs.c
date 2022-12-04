@@ -82,6 +82,7 @@ mem meminfo()
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/types.h>
 
 mem meminfo2()
 {
@@ -135,8 +136,6 @@ mem meminfo2()
 
 void function_template(const char* command)
 {
-	
-
 	int fd[2];
 	if(	pipe(fd)<0)
 		printf("error : pipe\n");
