@@ -32,10 +32,14 @@ int proc::populatePid()
 	wait(pid, &status);
 
 	int cnt = 0;
-	for (char* p i = strchr(readingbuf, '\n'); p != null; p = strchr(p + 1, '\n'))
+	for (char* p = strchr(readingbuf, '\n'); p != nullptr; p = strchr(p + 1, '\n'))
 		cnt++;
-	char lines[cnt][50];
-
+	
+	//de verif astea
+	readingbuf[strlen(readingbuf) + 1] = 0;
+	readingbuf[strlen(readingbuf)] = '\n';
+	//sscanf(readingbuf, "%f %f %s\n",cpu_cons,mem_cons,command);
+	sscanf(readingbuf, "%f %f %99[^\n]",cpu_cons,mem_cons,command);
 
 	printf("Created process with pid %d\n%s\n", pid, childout);
 	return 0;

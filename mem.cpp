@@ -1,22 +1,25 @@
 #include "mem.h"
 
 mem::mem() {
-
+	total = 0;
+	cachesize = count = 0;
+	strcpy(name,"");
+	freq = 0;
+	int ;
+	int ;
 }
 
-int mem::total()
+int mem::setTotal()
 {
 	FILE* in = fopen("/proc/meminfo", "r");
-	char a[100], b[100];
+	char a[100];
 	fgets(a, 100, in);
-	sscanf(a, "MemTotal:\t\t%d", total);
+	sscanf(a, "MemTotal:\t\t%d", total); //nr intreg in kb
 	fclose(in);
 }
 
 int mem::fillByHandle(char handle[5])
 {
-	mem out;
-
 	int fd[2];
 	if (pipe(fd) < 0)
 		printf("error : pipe\n");
@@ -51,7 +54,7 @@ int mem::fillByHandle(char handle[5])
 
 	printf("Created process with pid %d\n%s\n", pid, childout);
 
-	return out;
+	return 0;
 }
 
 
@@ -85,27 +88,27 @@ int mem::getHandles()
 	wait(pid, &status);
 
 	int cnt = 0;
-	for (char* p i = strchr(readingbuf, 'x'); p != null; p = strchr(p + 1, 'x'))
+	for (char* p = strchr(readingbuf, 'x'); p != nullptr; p = strchr(p + 1, 'x'))
 		cnt++;
-	char handle[5];
+	char handle[5]="";
 
-	char* p = strchr(readingbuf, 'x')
-		for (int i = 0; i < cnt; i++)
+	char* p = strchr(readingbuf, 'x');
+	for (int i = 0; i < cnt; i++)
+	{
+		for (int j = 0; j < 4; j++)
+			handle[j] = p[j + 1];
+
+		handle[4] = 0;
+		status = fillByHandle(handle);
+		if (status != 0)
 		{
-			for (int j = 0; j < 4; j++)
-				handle[j] = p[j + 1];
-
-			handle[j] = 0;
-			status = fillByHandle(handle);
-			if (status != 0)
-			{
-				printf("aualeu");
-			}
-			p = strchr(p + 1, 'x');
-			//merge doar pentru ca avem 0x apoi handle
+			printf("aualeu");
 		}
+		p = strchr(p + 1, 'x');
+		//merge doar pentru ca avem 0x apoi handle
+	}
 
 	printf("Created process with pid %d\n%s\n", pid, childout);
 
-	return out;
+	return 0;
 }

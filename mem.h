@@ -25,7 +25,7 @@ public:
 	Interestingly the amount of RAM has little or no effect on power consumption of PC components. A stick of 4 GB DDR3 RAM will draw about the same amount of power as a stick of 8 GB DDR3 RAM (assuming that they have the same clock speed).
 	*/
 	
-	int total();
+	int setTotal();
 	
 	static int getHandles();
 	static int fillByHandle(char handle[5]);
