@@ -1,6 +1,6 @@
 #include "procman.h"
 
-static procman* procman::getInstance()
+procman* procman::getInstance()
 {
 	if (instance == nullptr)
 	{
@@ -9,24 +9,18 @@ static procman* procman::getInstance()
 	return instance;
 }
 
-proc* procman::operator[](int index)
-{
-	if (index > size)
-	{
-		//eroare serioasa baga semnal SIGSEGV
-	}
-	return table[index];
-}
-
 proc* procman::operator[](int pid)
 {
-	setpoint i = set.find(pid);
-	if (i == set::end)
+	proc* a = new proc(pid);
+	auto i = set.find(a);
+	//setpoint i = set.find(pid);
+	delete a;
+	if (i == set.end())
 		return nullptr;
-	return i;
+	return *i;
 }
 
-static void procman::updateList()
+void procman::updateList()
 {
 	int fd[2];
 	if (pipe(fd) < 0)
@@ -55,7 +49,7 @@ static void procman::updateList()
 	int status;
 	wait(pid, &status);
 
-	for (setpoint i : set)
+	for (proc* i : set)
 	{
 		((proc*)i)->alive = false;
 	}
@@ -65,16 +59,16 @@ static void procman::updateList()
 	do
 	{
 		sscanf(p, "%d", &pid);
-		if (set[pid] != nullptr)
-			((proc*)set[pid])->alive = true;
+		if ((*instance)[pid] != nullptr)
+			(*instance)[pid]->alive = true;
 		else
-			set.insert(proc(pid));
-		((proc*)set[pid])->populatePid();
+			set.insert(new proc(pid));
+		((*instance)[pid])->populatePid();
 
 		p = strtok(NULL, "\n");
 	} while (p != nullptr);
 
-	for (setpoint i : set)
+	for (proc* i : set)
 	{
 		if (((proc*)i)->alive == false)
 			set.erase(i);

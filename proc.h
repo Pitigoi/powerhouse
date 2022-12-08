@@ -1,7 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <string.h>
-class process 
+class proc
 {
 protected:
 	int pid;
@@ -10,18 +10,15 @@ protected:
 	float cpu_cons;
 	float mem_cons;
 	//float gpu_cons;
-	friend bool operator< (const proc& a, const proc& b);
-	process(int pid) :pid(pid), alive(true)
+	friend bool operator<(const proc& a, const proc& b);
+	proc(int pid) :pid(pid), alive(true)
 	{
 
 	}
+	friend class procman;
 	//int consum;//=medie ponderata consum nominal celelalte componente
 public:
 
-	void print()
-	{
-		printf
-	}
 	
 	static void getPids();
 

@@ -2,7 +2,7 @@
 
 cpu* cpu::instance = nullptr;
 
-static cpu* cpu::getInstance()
+cpu* cpu::getInstance()
 {
 	if (instance == nullptr)
 	{

@@ -1,6 +1,6 @@
 #include "proc.h"
 
-static int proc::populatePid()
+int proc::populatePid()
 {
 
 	int fd[2];
@@ -43,5 +43,5 @@ static int proc::populatePid()
 
 bool operator< (const proc& a, const proc& b)
 {
-	return a.pid,b.pid;
+	return a.pid<b.pid;
 }

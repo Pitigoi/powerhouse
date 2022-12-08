@@ -1,13 +1,12 @@
 #pragma once
 #include "proc.h"
-
+#include <set>
 #define setpoint std::set<int>::iterator
 class procman
 {
 private:
 	procman();
 	static procman* instance;
-	static proc* table[];
 	static std::set<proc*> set;
 	procman(const procman& oth) = delete;
 	procman& operator=(const procman& oth) = delete;
