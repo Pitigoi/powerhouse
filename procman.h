@@ -1,7 +1,7 @@
 #pragma once
 #include "proc.h"
 #include <set>
-#define setpoint std::set<int>::iterator
+#define setpoint std::set<proc*>::iterator
 class procman
 {
 private:

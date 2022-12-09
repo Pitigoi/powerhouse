@@ -12,8 +12,7 @@ procman* procman::getInstance()
 proc* procman::operator[](int pid)
 {
 	proc* a = new proc(pid);
-	auto i = set.find(a);
-	//setpoint i = set.find(pid);
+	setpoint i = set.find(a);
 	delete a;
 	if (i == set.end())
 		return nullptr;
@@ -74,7 +73,5 @@ void procman::updateList()
 			set.erase(i);
 	}
 
-
 	printf("Created process with pid %d\n%s\n", pid, childout);
-
 }

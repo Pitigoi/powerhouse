@@ -20,9 +20,9 @@ int cpu::cpuinfo()
 {
 	FILE* in = fopen("/proc/cpuinfo", "r");
 
-	char a[100], b[100];
+	char a[100];
 	fgets(a, 100, in);
-	sscanf(a, "processor\t: %d", id);//id
+	sscanf(a, "processor\t: %d", &id);//id
 
 	for (int i = 0; i < 4; i++)
 		fgets(a, 100, in);
@@ -32,10 +32,10 @@ int cpu::cpuinfo()
 	for (int i = 0; i < 2; i++)
 		fgets(a, 100, in);
 
-	sscanf(a, "cpu MHz\t\t: %f", freq);//freq
+	sscanf(a, "cpu MHz\t\t: %f", &freq);//freq
 	fgets(a, 100, in);
 
-	sscanf(a, "cache size\t: %d", cachesize);//cachesize
+	sscanf(a, "cache size\t: %d", &cachesize);//cachesize
 	fclose(in);
 	return 0;
 }

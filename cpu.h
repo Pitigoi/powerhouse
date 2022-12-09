@@ -1,6 +1,6 @@
 #pragma once
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 class cpu 
 {
 private:
@@ -29,9 +29,6 @@ public:
 
 	int cpuinfo();
 
-	void print()
-	{
-		printf
-	}
+	
 };
 

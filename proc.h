@@ -18,14 +18,11 @@ protected:
 	}
 	friend class procman;
 	//int consum;//=medie ponderata consum nominal celelalte componente
+	friend bool operator< (const proc& a, const proc& b);
 public:
 
 	
-	static void getPids();
 
-	int populatePid()
-	{
-
-	}
+	int populatePid();
 };
 

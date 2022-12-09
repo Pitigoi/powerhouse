@@ -1,22 +1,24 @@
 #pragma once
 #include "mem.h"
 #include "cpu.h"
+#include <set>
+//#include "battery.h"
 //#include "proc.h"
 
 #define setpoint std::set<int>::iterator
-class procman
+class hwman
 {
 private:
-	procman();
-	static procman* instance;
-	static std::set<mem*> set;
+	hwman();
+	static hwman* instance;
 	static cpu* cpu;
-	procman(const procman& oth) = delete;
-	procman& operator=(const procman& oth) = delete;
+	static std::set<mem*> mems;
+	hwman(const hwman& oth) = delete;
+	int getHandles();
+	hwman& operator=(const hwman& oth) = delete;
 public:
-	~procman();
-	static procman* getInstance();
+	~hwman();
+	static hwman* getInstance();
 	static int size;
-	proc* operator[](int index);
-	static void updateList();
+	mem* memory(int index);
 };
