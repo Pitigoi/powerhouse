@@ -4,13 +4,19 @@ class GPU
 {
 private:
     int pid[50];
-    int mib[50];
-    int num;
+    float mib[50];
+    int index;
+
     int getListOfProcesses();
+    int isUsingGpu(int pid);
+    int readFromPipe(const char *command, char* str);
+    float convertMib(char* str);
+
 
 public:
     GPU();
-    ~GPU(){};
-    int isUsingGpu(int pid);
-    int getMibOfProcess(int pid);
+    ~GPU();
+   
+    float getMibOfProcess(int pid);
+    int updateList();
 };

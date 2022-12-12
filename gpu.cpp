@@ -1,14 +1,107 @@
 #include "gpu.h"
-//
-//wip
-//
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#define READ_END 0
+#define WRITE_END 1
+
 GPU::GPU()
 {
+    this->index=0;
+
+    int ok=getListOfProcesses();
+    if(ok!=0)
+    {
+        //TO DO LOGGER FAILED TO FETCH LIST OF PROC
+    }
+
+
+
+}
+
+int GPU::getListOfProcesses()
+{
+    char* buff =(char*)malloc(sizeof(char)*1024);
+    int ok = readFromPipe("nvidia-smi | tail +19 | tr -s ' *' ' '", buff);
+    if(ok!=0)
+    {   
+        //LOGGER
+        return -1;
+    }
+
+    const char delim[]=" \n";
+
+    char* token=strtok(buff, delim);
+    char* dup=strdup(buff);
+
+    int cnt=1;
+
+    while(token!=NULL)
+    {
+        token=strtok(NULL, delim);
+
+        if(token[0] == '+')         //it reached end of list of processes
+            break;
+
+        if(cnt==4)
+        {
+            this->pid[this->index] = atoi(token);
+            
+        }
+
+        if(cnt==7)
+        {
+            this->mib[this->index] = convertMib(token);
+            this->index++;
+        }
+
+        if(dup[token-buff+strlen(buff)] == '\n')     //mark new line
+        {
+            cnt=1;
+        }
+        else
+        {
+            cnt++;
+        }
+
+    }
+
+    free(dup);
+    dup=NULL;
+
+    return 0;
+
+}
+
+float GPU::convertMib(char* str)
+{
+    char* aux=(char*)malloc(sizeof(char) * strlen(str)+1);
+    int cnt=0;
+
+    for(int i=0;i<strlen(str);i++)
+    {
+        if(str[i] == 'M')
+        {
+            cnt=i;
+            break;
+        }
+    }
+
+    strncpy(aux, str, cnt);
+
+    float rez=atof(aux);
+
+    free(aux);
+    aux=NULL;
+    
+    return rez;
+
 }
 
 int GPU::isUsingGpu(int pid)
 {
-    for (int i = 0; i < num; i++)
+    for (int i = 0; i < this->index; i++)
     {
         if (pid == this->pid[i])
             return i; // returns the index of the process
@@ -17,7 +110,7 @@ int GPU::isUsingGpu(int pid)
     return -1;
 }
 
-int GPU::getMibOfProcess(int pid)
+float GPU::getMibOfProcess(int pid)
 {
     int rez = isUsingGpu(pid);
 
@@ -27,4 +120,63 @@ int GPU::getMibOfProcess(int pid)
     }
 
     return -1;
+}
+
+int GPU::readFromPipe(const char *command, char* str)
+{
+	int fd[2];
+	pipe(fd);
+
+	if (pipe(fd) < 0)
+		printf("error : pipe\n");
+	// TO DO : LOGGER MARK aand exit
+
+	pid_t pid = fork();
+
+	switch (pid)
+	{
+	case -1:
+		// LOGGER
+		printf("error : pipe\n");
+		return -1;
+	case 0:
+		close(fd[READ_END]);
+		dup2(fd[WRITE_END], 1);
+		execl("/bin/sh", "sh","-c", command, (char*)NULL);
+		return 0;
+	default:
+		close(fd[WRITE_END]);
+
+		char readingbuf[2] = "a";
+		char childout[512] = "";
+		while (read(fd[READ_END], readingbuf, 1) > 0)
+		{
+			strcat(childout, readingbuf);
+		}
+
+		close(fd[READ_END]);
+		int status;
+		wait(&status);
+
+		strcpy (str, childout);
+		return 0;
+	}
+
+}
+
+int GPU::updateList()
+{
+    int ok = this->getListOfProcesses();
+    return ok;
+}
+
+GPU::~GPU()
+{
+    for(int i=0;i<index;i++)
+    {
+        this->pid[i]=0;
+        this->mib[i]=0;
+    }
+
+    this->index=0;
 }

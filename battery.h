@@ -7,18 +7,18 @@ private:
     float current_energy;
     float time_to_empty;
 
-    void setVoltage();
-    void setCurrentEnergy();
-    void setTimeToEmpty();
+   // void setVoltage();
+   // void setCurrentEnergy();
+   // void setTimeToEmpty();
+    void set(float* param, const char* command);
 
-    void updateStats();
+    //void updateStats();
 
-    char *readFromPipe(char *command);
+    int readFromPipe(const char *command, char* str);
 
 public:
     Battery();
     ~Battery(){};
-    // Battery(int v, int e, int t);
 
     float getVoltage();
     float getCurrentEnergy();

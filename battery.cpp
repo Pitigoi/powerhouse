@@ -21,7 +21,7 @@ float Battery::getTimeToEmpty()
 	return this->time_to_empty;
 }
 
-char *Battery::readFromPipe(char *command)
+int Battery::readFromPipe(const char *command, char* str)
 {
 	int fd[2];
 	pipe(fd);
@@ -31,17 +31,18 @@ char *Battery::readFromPipe(char *command)
 	// TO DO : LOGGER MARK aand exit
 
 	pid_t pid = fork();
-	printf("%d\n", pid);
+	//printf("%d\n", pid);
 	switch (pid)
 	{
 	case -1:
 		// LOGGER
 		printf("error : pipe\n");
-		exit(EXIT_FAILURE);
+		return -1;
 	case 0:
 		close(fd[READ_END]);
 		dup2(fd[WRITE_END], 1);
-		execl(command, (char *)NULL);
+		execl("/bin/sh", "sh","-c", command, (char*)NULL);
+		return 0;
 	default:
 		close(fd[WRITE_END]);
 
@@ -55,48 +56,95 @@ char *Battery::readFromPipe(char *command)
 		close(fd[READ_END]);
 		int status;
 		wait(&status);
+
+		strcpy (str, childout);
+		return 0;
 	}
+
+	
 }
 
+void Battery::set(float* param, const char* command)
+{
+	char *buff = (char *)malloc(sizeof(char) * 200);
+	int ok = readFromPipe(command, buff);
+	if(ok != 0)
+	{
+		//TO DO: Logger check
+		return;
+	}
+
+	 float volt = atof(buff);
+
+	*param = volt;
+
+	free(buff);
+	buff=NULL;
+}
+/*
 void Battery::setVoltage()
 {
-	char *v = (char *)malloc(sizeof(char) * 20);
-	strcpy(v, readFromPipe("\"upower -d | egrep -m1 'voltage:' | tr -s ' *' ' ' | cut -d' ' -f3 | tr -s ',' '.'\""));
+	char *v = (char *)malloc(sizeof(char) * 200);
+	int ok = readFromPipe("upower -d | egrep -m1 'voltage:' | tr -s ' *' ' ' | cut -d' ' -f3 | tr -s ',' '.'", v);
+	if(ok != 0)
+	{
+		//TO DO: Logger check
+		return;
+	}
 
-	printf("%s", v);
+	 float volt = atof(v);
 
-	// float volt = atof(v);
+	this->voltage = volt;
 
-	// this->voltage = volt;
+	free(v);
+	v=NULL;
 }
 
 void Battery::setCurrentEnergy()
 {
-	char *e = (char *)malloc(sizeof(char) * 20);
-	strcpy(e, readFromPipe("\"upower -d | egrep -m1 'energy:' | tr -s ' *' ' ' | cut -d' ' -f3 | tr -s ',' '.'\""));
-
-	printf("%s", e);
+	char *e = (char *)malloc(sizeof(char) * 200);
+	int ok= readFromPipe("upower -d | egrep -m1 'energy:' | tr -s ' *' ' ' | cut -d' ' -f3 | tr -s ',' '.'", e);
+	if(ok != 0)
+	{
+		//TO DO: Logger check
+		return;
+	}
 
 	float en = atof(e);
 
 	this->current_energy = en;
+	free(e);
+	e=NULL;
 }
 
 void Battery::setTimeToEmpty()
 {
-	char *e = (char *)malloc(sizeof(char) * 20);
-	strcpy(e, readFromPipe("\"upower -d | egrep -m1 'time' | tr -s ' *' ' ' | cut -d' ' -f5 | tr -s ',' '.'\""));
+	char *e = (char *)malloc(sizeof(char) * 200);
+	int ok =readFromPipe("upower -d | egrep -m1 'time' | tr -s ' *' ' ' | cut -d' ' -f5 | tr -s ',' '.'", e);
 
-	printf("%s", e);
+	if(ok != 0)
+	{
+		//TO DO: Logger check
+		return;
+	}
 
 	float en = atof(e);
 
-	this->current_energy = en;
+	this->time_to_empty = en;
+
+	free(e);
+	e=NULL;
 }
+*/
 
 Battery::Battery()
 {
-	this->setCurrentEnergy();
-	// this->setVoltage();
-	// this->setTimeToEmpty();
+	this->voltage=0;
+	this->current_energy=0;
+	this->time_to_empty=0;
+
+	this->set(&this->voltage, "upower -d | egrep -m1 'voltage:' | tr -s ' *' ' ' | cut -d' ' -f3 | tr -s ',' '.'");
+	this->set(&this->current_energy, "upower -d | egrep -m1 'energy:' | tr -s ' *' ' ' | cut -d' ' -f3 | tr -s ',' '.'");
+	this->set(&this->time_to_empty, "upower -d | egrep -m1 'time' | tr -s ' *' ' ' | cut -d' ' -f5 | tr -s ',' '.'");
+
 }
