@@ -15,9 +15,45 @@ GPU::GPU()
     {
         //TO DO LOGGER FAILED TO FETCH LIST OF PROC
     }
+    setTotalUsage();
 
 
+}
 
+float GPU::getTotalUsage()
+{
+    return totalUsage;
+}
+
+void GPU::setTotalUsage()
+{
+    char* buff =(char*)malloc(sizeof(char)*1024);
+    this->readFromPipe("nvidia-smi -q | egrep \"FB\" -A 1 | egrep -o \" [0-9]* MiB\" | egrep -o \"[0-9]*\"", buff);
+    this->totalUsage=atof(buff);
+
+}
+
+float GPU::getConsumptionOfProcess(int pid)
+{
+    int nominal_watts = 53;
+    
+    int mib = getMibOfProcess(pid);
+    if(mib == -1)
+    {
+        return -1;
+    }
+
+    
+    float rez = (mib* nominal_watts)/totalUsage;
+
+    return rez;
+
+
+}
+
+int GPU::getIndex()
+{
+    return this->index;
 }
 
 int GPU::getListOfProcesses()
