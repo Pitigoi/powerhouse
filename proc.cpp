@@ -1,5 +1,6 @@
 #include "proc.h"
 
+#include <stdlib.h>
 int proc::populatePid()
 {
 
@@ -7,16 +8,18 @@ int proc::populatePid()
 	if (pipe(fd) < 0)
 		printf("error : pipe\n");
 
-	int pid = fork();
-	switch (pid) {
+	int pid2 = fork();
+	switch (pid2) {
 	case -1: /* fork failed */
 		printf("error : fork\n");
 		exit(EXIT_FAILURE);
 	case 0: /* child process */
 		close(fd[0]);
 		dup2(fd[1], 1);
-
-		execl("/bin/sh", "sh", "-c", "ps -p pidul -o %cpu,%mem,comm | awk '{$1=$1};1' | tail -n+2", (char*)NULL);
+		char comm[] = "ps - p";
+		strcat(comm, itoa(pid));
+		strcat(comm, " -o %cpu,%mem,comm | awk '{$1=$1};1' | tail -n+2");
+		execl("/bin/sh", "sh", "-c", comm, (char*)NULL);
 	}
 
 	close(fd[1]);
@@ -40,8 +43,9 @@ int proc::populatePid()
 	readingbuf[strlen(readingbuf)] = '\n';
 	//sscanf(readingbuf, "%f %f %s\n",cpu_cons,mem_cons,command);
 	sscanf(readingbuf, "%f %f %99[^\n]",cpu_cons,mem_cons,command);
-
-	printf("Created process with pid %d\n%s\n", pid, childout);
+	cpu_cons*=45/100;
+	mem_cons*=298/10000;
+	printf("Created process with pid %d\n%s\n", pid2, childout);
 	return 0;
 }
 
