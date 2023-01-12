@@ -20,7 +20,7 @@ public:
     Battery();
     ~Battery(){};
 
-    void refresh()
+    void refresh();
     float getVoltage();
     float getCurrentEnergy();
     float getTimeToEmpty();

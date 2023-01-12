@@ -72,7 +72,7 @@ int hwman::getHandles()
 		//merge doar pentru ca avem 0x apoi handle
 	}
 
-	printf("Created process with pid %d\n%s\n", pid, childout);
+	//printf("Created process with pid %d\n%s\n", pid, childout);
 
 	return 0;
 }

@@ -78,5 +78,5 @@ void procman::updateList()
 			set.erase(i);
 	}
 
-	printf("Created process with pid %d\n%s\n", pid, childout);
+	//printf("Created process with pid %d\n%s\n", pid, childout);
 }

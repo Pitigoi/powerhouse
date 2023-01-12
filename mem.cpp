@@ -72,7 +72,7 @@ int mem::fillByHandle(char handle[5])
 	p=strstr(childout, "\tVolatile Size : ");
 	sscanf(p, "\tVolatile Size : %d GB\n",&cachesize);
 
-	printf("Created process with pid %d\n%s\n", pid, childout);
+	//printf("Created process with pid %d\n%s\n", pid, childout);
 
 	return 0;
 }
