@@ -137,7 +137,7 @@ void Battery::setTimeToEmpty()
 }
 */
 
-Battery::Battery()
+void Battery::refresh()
 {
 	this->voltage=0;
 	this->current_energy=0;
@@ -147,4 +147,9 @@ Battery::Battery()
 	this->set(&this->current_energy, "upower -d | egrep -m1 'energy:' | tr -s ' *' ' ' | cut -d' ' -f3 | tr -s ',' '.'");
 	this->set(&this->time_to_empty, "upower -d | egrep -m1 'time' | tr -s ' *' ' ' | cut -d' ' -f5 | tr -s ',' '.'");
 
+}
+
+Battery::Battery()
+{
+	this->refresh();
 }

@@ -2,12 +2,20 @@
 
 cpu* cpu::instance = nullptr;
 
+cpu::~cpu()
+{
+	instance = nullptr;
+	id = cachesize = 0;
+	freq = 0;
+	strcpy(name, "");
+}
+
 cpu* cpu::getInstance()
 {
 	if (instance == nullptr)
 	{
 		instance = new cpu;
-		int status = instance->cpuinfo();
+		int status = cpu::cpuinfo();
 		if (status != 0)
 		{
 			printf("opa");

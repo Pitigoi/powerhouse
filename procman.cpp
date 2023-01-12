@@ -18,6 +18,11 @@ proc* procman::operator[](int pid)
 		return nullptr;
 	return *i;
 }
+procman::~procman()
+{
+	instance = nullptr;
+	set.clear();
+}
 
 void procman::updateList()
 {

@@ -28,7 +28,7 @@ public:
     int updateList();
     float getTotalUsage();
 
-    float getWattsUsage();
+    //float getWattsUsage();
     
 
 

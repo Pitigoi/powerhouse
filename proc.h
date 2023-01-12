@@ -18,7 +18,6 @@ protected:
 		gpu_cons = cpu_cons = mem_cons = 0;
 	}
 	friend class procman;
-	//int consum;//=medie ponderata consum nominal celelalte componente
 	friend bool operator< (const proc& a, const proc& b);
 public:
 

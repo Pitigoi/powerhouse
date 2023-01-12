@@ -1,12 +1,22 @@
 #include "hwman.h"
 
+hwman* hwman::getInstance()
+{
+	if (instance == nullptr)
+		instance = new hwman();
+	return instance;
+}
 
 hwman::hwman()
 {
 	cpu = cpu::getInstance();
 	mem::setTotal();
 	mem::getHandles();
+}
 
+hwman::~hwman()
+{
+	mems.clear();
 }
 
 int hwman::getHandles()
@@ -38,14 +48,14 @@ int hwman::getHandles()
 	int status;
 	wait(pid, &status);
 
-	int cnt = 0;
+	size = 0;
 	for (char* p = strchr(readingbuf, 'x'); p != nullptr; p = strchr(p + 1, 'x'))
-		cnt++;
+		size++;
 	char handle[5] = "";
 
 	char* p = strchr(readingbuf, 'x');
 	mem* memp = new mem();
-	for (int i = 0; i < cnt; i++)
+	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < 4; j++)
 			handle[j] = p[j + 1];
@@ -65,3 +75,37 @@ int hwman::getHandles()
 
 	return 0;
 }
+
+mem* hwman::memory(int index)
+{
+	auto itr = mems.begin();
+	for (itr; itr != mems.end() && index!=0; itr++) {
+		index--;
+	}
+	return *itr;
+}
+/*
+void hwman::printAll()
+{
+
+}
+
+void hwman::printCpu()
+{
+
+}
+
+void hwman::printGpu()
+{
+
+}
+
+void hwman::printMem()
+{
+
+}
+
+void hwman::printBat()
+{
+
+}*/

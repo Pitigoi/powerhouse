@@ -17,7 +17,7 @@ int proc::populatePid()
 		close(fd[0]);
 		dup2(fd[1], 1);
 		char comm[] = "ps - p";
-		strcat(comm, itoa(pid));
+		itoa(pid, comm + 6, 10);
 		strcat(comm, " -o %cpu,%mem,comm | awk '{$1=$1};1' | tail -n+2");
 		execl("/bin/sh", "sh", "-c", comm, (char*)NULL);
 	}
@@ -43,8 +43,8 @@ int proc::populatePid()
 	readingbuf[strlen(readingbuf)] = '\n';
 	//sscanf(readingbuf, "%f %f %s\n",cpu_cons,mem_cons,command);
 	sscanf(readingbuf, "%f %f %99[^\n]",cpu_cons,mem_cons,command);
-	cpu_cons*=45/100;
-	mem_cons*=298/10000;
+	cpu_cons*=0.45;
+	mem_cons*=0.0298;
 	printf("Created process with pid %d\n%s\n", pid2, childout);
 	return 0;
 }
