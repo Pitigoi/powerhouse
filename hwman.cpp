@@ -11,7 +11,7 @@ hwman::hwman()
 {
 	cpu = cpu::getInstance();
 	mem::setTotal();
-	mem::getHandles();
+	hwman::getHandles();
 }
 
 hwman::~hwman()
@@ -54,9 +54,10 @@ int hwman::getHandles()
 	char handle[5] = "";
 
 	char* p = strchr(readingbuf, 'x');
-	mem* memp = new mem();
+	mem* memp;
 	for (int i = 0; i < size; i++)
 	{
+		memp = new mem();
 		for (int j = 0; j < 4; j++)
 			handle[j] = p[j + 1];
 
