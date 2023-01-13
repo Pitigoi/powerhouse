@@ -48,7 +48,6 @@ float GPU::getConsumptionOfProcess(int pid)
 
     return rez;
 
-
 }
 
 int GPU::getIndex()
@@ -58,6 +57,10 @@ int GPU::getIndex()
 
 int GPU::getListOfProcesses()
 {
+    memset(this->mib, 0, sizeof(this->mib));
+    memset(this->pid, 0, sizeof(this->pid));
+    index =0;
+    
     char* buff =(char*)malloc(sizeof(char)*1024);
     int ok = readFromPipe("nvidia-smi | tail +19 | tr -s ' *' ' '", buff);
     if(ok!=0)
@@ -202,6 +205,10 @@ int GPU::readFromPipe(const char *command, char* str)
 
 int GPU::updateList()
 {
+    memset(this->mib, 0, sizeof(this->mib));
+    memset(this->pid, 0, sizeof(this->pid));
+    index =0;
+
     int ok = this->getListOfProcesses();
     return ok;
 }
