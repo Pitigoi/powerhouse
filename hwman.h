@@ -4,8 +4,6 @@
 #include "gpu.h"
 #include "battery.h"
 #include <set>
-//#include "battery.h"
-//#include "proc.h"
 
 #define setpoint std::set<int>::iterator
 class hwman

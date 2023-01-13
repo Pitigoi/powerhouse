@@ -56,7 +56,6 @@ int mem::fillByHandle(char handle[5])
 	sscanf(p,"\tType: %9s\n",type);
 
 	//	Speed : 3200 MT / s
-	//mt/s direct mhz
 	p=strstr(childout, "\tSpeed : ");
 	sscanf(p,"\tSpeed : %d MT / s\n", &freq);
 

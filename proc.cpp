@@ -37,11 +37,9 @@ int proc::populatePid()
 	int cnt = 0;
 	for (char* p = strchr(readingbuf, '\n'); p != nullptr; p = strchr(p + 1, '\n'))
 		cnt++;
-	
-	//de verif astea
+	//adg un endl pt sscanf
 	readingbuf[strlen(readingbuf) + 1] = 0;
 	readingbuf[strlen(readingbuf)] = '\n';
-	//sscanf(readingbuf, "%f %f %s\n",cpu_cons,mem_cons,command);
 	sscanf(readingbuf, "%f %f %99[^\n]",cpu_cons,mem_cons,command);
 	cpu_cons*=0.45;
 	mem_cons*=0.0298;

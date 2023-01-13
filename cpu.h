@@ -14,7 +14,6 @@ protected:
 	static char name[100];
 	static float freq;
 	static int cachesize;
-	//int consum;
 	static int cpuinfo();
 public:
 	~cpu();

@@ -27,9 +27,4 @@ public:
     float getMibOfProcess(int pid);
     int updateList();
     float getTotalUsage();
-
-    //float getWattsUsage();
-    
-
-
 };

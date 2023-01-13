@@ -5,5 +5,4 @@ void main()
 {
 	procman* pm = procman::getInstance();
 	hwman* hm = hwman::getInstance();
-	
 }
