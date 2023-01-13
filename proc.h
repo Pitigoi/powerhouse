@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <string.h>
+#include "hwman.h"
 class proc
 {
 protected:

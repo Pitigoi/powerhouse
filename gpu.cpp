@@ -203,16 +203,6 @@ int GPU::readFromPipe(const char *command, char* str)
 
 }
 
-int GPU::updateList()
-{
-    memset(this->mib, 0, sizeof(this->mib));
-    memset(this->pid, 0, sizeof(this->pid));
-    index =0;
-
-    int ok = this->getListOfProcesses();
-    return ok;
-}
-
 GPU::~GPU()
 {
     for(int i=0;i<index;i++)

@@ -1,6 +1,6 @@
 #include "proc.h"
-
 #include <stdlib.h>
+
 int proc::populatePid()
 {
 
@@ -32,7 +32,7 @@ int proc::populatePid()
 	}
 	close(fd[0]);
 	int status;
-	wait(pid, &status);
+	wait(pid2, &status);
 
 	int cnt = 0;
 	for (char* p = strchr(readingbuf, '\n'); p != nullptr; p = strchr(p + 1, '\n'))
@@ -41,8 +41,10 @@ int proc::populatePid()
 	readingbuf[strlen(readingbuf) + 1] = 0;
 	readingbuf[strlen(readingbuf)] = '\n';
 	sscanf(readingbuf, "%f %f %99[^\n]",cpu_cons,mem_cons,command);
+	hwman* hw = hwman::getInstance();
 	cpu_cons*=0.45;
 	mem_cons*=0.0298;
+	gpu_cons = hw->gpu->getConsumptionOfProcess(pid);
 	//printf("Created process with pid %d\n%s\n", pid2, childout);
 	return 0;
 }

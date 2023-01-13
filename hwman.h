@@ -12,12 +12,14 @@ private:
 	hwman();
 	static hwman* instance;
 	static cpu* cpu;
-	static GPU* gpu;
 	static std::set<mem*> mems;
 	static Battery bat;
 	hwman(const hwman& oth) = delete;
 	int getHandles();
 	hwman& operator=(const hwman& oth) = delete;
+protected:
+	static GPU* gpu;
+	friend int proc::populatePid();
 public:
 	~hwman();
 	static hwman* getInstance();

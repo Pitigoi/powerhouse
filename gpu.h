@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "proc.h"
 
 class GPU
 {
@@ -7,6 +8,7 @@ private:
     float mib[50];
     int index;
     float totalUsage;
+    int pid[50];
 
     int getListOfProcesses();
     int isUsingGpu(int pid);
@@ -14,22 +16,17 @@ private:
     float convertMib(char* str);
     void setTotalUsage();
     
-    
+protected:
+
+    friend int proc::populatePid();
+    float getConsumptionOfProcess(int pid);
 
 
 public:
     GPU();
     ~GPU();
-    int pid[50];
     
-    float getConsumptionOfProcess(int pid);
     int getIndex();
     float getMibOfProcess(int pid);
-    int updateList();
     float getTotalUsage();
-
-    float getWattsUsage();
-    
-
-
 };
