@@ -16,7 +16,7 @@ protected:
 	proc(int pid) :pid(pid), alive(true)
 	{
 		strcpy(command, "");
-		gpu_cons = cpu_cons = mem_cons = 0;
+		gpu_cons = cpu_cons = mem_cons = total_cons = 0;
 	}
 	friend class procman;
 	friend bool operator< (const proc& a, const proc& b);

@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 #define READ_END 0
 #define WRITE_END 1
-
+bool GPU::smierr=false;
 GPU::GPU()
 {
     this->index=0;
@@ -13,9 +13,11 @@ GPU::GPU()
     int ok=getListOfProcesses();
     if(ok!=0)
     {
+        smierr=true;
         //TO DO LOGGER FAILED TO FETCH LIST OF PROC
     }
-    setTotalUsage();
+    if(!smierr)
+        setTotalUsage();
 
 
 }
@@ -29,18 +31,23 @@ void GPU::setTotalUsage()
 {
     char* buff =(char*)malloc(sizeof(char)*1024);
     this->readFromPipe("nvidia-smi -q | egrep \"FB\" -A 1 | egrep -o \" [0-9]* MiB\" | egrep -o \"[0-9]*\"", buff);
+    if(strlen(buff)>0)
     this->totalUsage=atof(buff);
+    else 
+    this->totalUsage=0;
+
 
 }
 
 float GPU::getConsumptionOfProcess(int pid)
 {
+    if(smierr)return 0;
     int nominal_watts = 53;
     
     int mib = getMibOfProcess(pid);
     if(mib == -1)
     {
-        return -1;
+        return 0;
     }
 
     
@@ -67,6 +74,11 @@ int GPU::getListOfProcesses()
     {   
         //LOGGER
         return -1;
+    }
+    if(strlen(buff)==0)
+    {
+        //LOGGER
+        return -2;
     }
 
     const char delim[]=" \n";

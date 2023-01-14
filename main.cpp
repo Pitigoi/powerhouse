@@ -3,7 +3,8 @@
 
 int main()
 {
-	procman::updateList();
+	int a=12;
+	procman::getInstance().updateList();
 	//procman::print();
 
 	return 0;

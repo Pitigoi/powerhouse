@@ -4,7 +4,6 @@
 class GPU
 {
 private:
-    
     float mib[50];
     int index;
     float totalUsage;
@@ -16,6 +15,7 @@ private:
     float convertMib(char* str);
     void setTotalUsage();
 public:
+    static bool smierr;
     GPU();
     ~GPU();
     float getConsumptionOfProcess(int pid);

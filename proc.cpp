@@ -17,10 +17,10 @@ int proc::populatePid()
 		close(fd[0]);
 		dup2(fd[1], 1);
 		dup2(fd[1], 2);
-		char comm[64] ;
-		snprintf(comm, 64, "ps -p%d", pid);
+		char comm[64] ="";
+		sprintf(comm,"ps -p%d", pid);
 		strcat(comm," -o %cpu,%mem,comm | awk '{$1=$1};1' | tail -n+2");
-		printf("%s",comm);
+		//printf("testpipe");
 		execl("/bin/sh", "sh", "-c", comm, (char*)NULL);
 	}
 
@@ -30,7 +30,6 @@ int proc::populatePid()
 	char childout[512] = "";
 	while (read(fd[0], readingbuf, 1) > 0)
 	{
-		printf("%c",readingbuf);
 		strcat(childout, readingbuf);
 		cpu_cons*=0.45;
 	}
@@ -47,6 +46,7 @@ int proc::populatePid()
 	sscanf(childout, "%f %f %99[^\n]",&cpu_cons,&mem_cons,command);
 	cpu_cons*=0.45;
 	mem_cons*=0.0298;
+	if(GPU::smierr)
 	gpu_cons = hwman::gpucons(pid);
 	//printf("Created process with pid %d\n%s\n", pid2, childout);
 	return 0;
