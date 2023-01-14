@@ -78,6 +78,7 @@ int GPU::getListOfProcesses()
     if(strlen(buff)==0)
     {
         //LOGGER
+        free(buff);
         return -2;
     }
 

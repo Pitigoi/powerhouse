@@ -18,12 +18,13 @@ procman& procman::getInstance()
 
 proc* procman::operator[](int pid)
 {
-	proc* a = new proc(pid);
-	procpoint i = set.find(a);
-	delete a;
-	if (i == set.end())
+	procpoint p=set.begin();
+	for(p;p!=set.end();p++)
+		if((*p)->pid==pid)
+			break;
+	if (p == set.end())
 		return nullptr;
-	return *i;
+	return *p;
 }
 procman::~procman()
 {
@@ -50,10 +51,17 @@ void procman::updateList()
 	close(fd[1]);
 
 	char readingbuf[2] = "a";
-	char childout[512] = "";
-	while (read(fd[0], readingbuf, 1) > 0)
+	int* pids=new int[100];
+	int pidn=0;
+	char childout[12] = "";
+	while (read(fd[0], readingbuf, 1) > 0 && pidn<100-1)
 	{
 		strcat(childout, readingbuf);
+		if(readingbuf[0]=='\n')
+		{
+			sscanf(childout,"%d",&(pids[pidn++]));
+			strcat(childout,"");
+		}
 	}
 	close(fd[0]);
 	int status;
@@ -63,19 +71,14 @@ void procman::updateList()
 	{
 		((proc*)i)->alive = false;
 	}
-
-	char* p = strtok(childout, "\n");
-	do
+	for(int i=0;i<pidn;i++)
 	{
-		sscanf(p, "%d", &pid);
-		if ((*instance)[pid] != nullptr)
-			(*instance)[pid]->alive = true;
+		if ((*instance)[pids[i]] != nullptr)
+			(*instance)[pids[i]]->alive = true;
 		else
-			set.insert(new proc(pid));
-		((*instance)[pid])->populatePid();
-
-		p = strtok(NULL, "\n");
-	} while (p != nullptr);
+			set.insert(new proc(pids[i]));
+		((*instance)[pids[i]])->populatePid();
+	} 
 
 	for (proc* i : set)
 	{

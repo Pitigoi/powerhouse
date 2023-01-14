@@ -16,12 +16,12 @@ int proc::populatePid()
 	case 0: /* child process */
 		close(fd[0]);
 		dup2(fd[1], 1);
-		dup2(fd[1], 2);
 		char comm[64] ="";
 		sprintf(comm,"ps -p%d", pid);
 		strcat(comm," -o %cpu,%mem,comm | awk '{$1=$1};1' | tail -n+2");
-		//printf("testpipe");
-		execl("/bin/sh", "sh", "-c", comm, (char*)NULL);
+		printf("testpipe");
+		execl("/bin/sh", "sh", "-c", comm, (char*)NULL);	//eroare valgrind
+		exit(1);
 	}
 
 	close(fd[1]);
