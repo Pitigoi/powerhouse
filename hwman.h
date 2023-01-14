@@ -4,25 +4,24 @@
 #include "gpu.h"
 #include "battery.h"
 #include <set>
+#include <sys/wait.h>
 
-#define setpoint std::set<int>::iterator
 class hwman
 {
 private:
 	hwman();
 	static hwman* instance;
-	static cpu* cpu;
+	static cpu* CPU;
+	static GPU* gpu;
 	static std::set<mem*> mems;
 	static Battery bat;
 	hwman(const hwman& oth) = delete;
 	int getHandles();
 	hwman& operator=(const hwman& oth) = delete;
-protected:
-	static GPU* gpu;
-	friend int proc::populatePid();
 public:
 	~hwman();
-	static hwman* getInstance();
+	static hwman& getInstance();
 	static int size;//de mem
 	mem* memory(int index);
+	static float gpucons(int pid);
 };

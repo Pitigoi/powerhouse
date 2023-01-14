@@ -1,15 +1,21 @@
 #include "hwman.h"
+#include <sys/wait.h>
 
-hwman* hwman::getInstance()
+cpu* hwman::CPU= cpu::getInstance();
+GPU* hwman::gpu=new GPU();
+int hwman::size=0;
+std::set<mem*> hwman::mems={};
+hwman* hwman::instance=nullptr;
+hwman& hwman::getInstance()
 {
 	if (instance == nullptr)
 		instance = new hwman();
-	return instance;
+	return *instance;
 }
 
 hwman::hwman()
 {
-	cpu = cpu::getInstance();
+	CPU = cpu::getInstance();
 	mem::setTotal();
 	hwman::getHandles();
 }
@@ -46,7 +52,7 @@ int hwman::getHandles()
 	}
 	close(fd[0]);
 	int status;
-	wait(pid, &status);
+	wait(&status);
 
 	size = 0;
 	for (char* p = strchr(readingbuf, 'x'); p != nullptr; p = strchr(p + 1, 'x'))
@@ -84,6 +90,12 @@ mem* hwman::memory(int index)
 		index--;
 	}
 	return *itr;
+}
+
+float hwman::gpucons(int pid)
+{
+	float a =gpu->getConsumptionOfProcess(pid);
+	return a;
 }
 /*
 void hwman::printAll()

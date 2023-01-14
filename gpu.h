@@ -1,5 +1,5 @@
+#pragma once
 #include <stdio.h>
-#include "proc.h"
 
 class GPU
 {
@@ -15,17 +15,10 @@ private:
     int readFromPipe(const char *command, char* str);
     float convertMib(char* str);
     void setTotalUsage();
-    
-protected:
-
-    friend int proc::populatePid();
-    float getConsumptionOfProcess(int pid);
-
-
 public:
     GPU();
     ~GPU();
-    
+    float getConsumptionOfProcess(int pid);
     int getIndex();
     float getMibOfProcess(int pid);
     float getTotalUsage();

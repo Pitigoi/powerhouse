@@ -1,7 +1,7 @@
 #pragma once
 #include "proc.h"
 #include <set>
-#define setpoint std::set<proc*>::iterator
+#define procpoint std::set<proc*>::iterator
 class procman
 {
 private:
@@ -12,8 +12,9 @@ private:
 	procman& operator=(const procman& oth) = delete;
 public:
 	~procman();
-	static procman* getInstance();
+	static procman& getInstance();
 	static int size;
 	proc* operator[](int index);
 	static void updateList();
+	static void print();
 };

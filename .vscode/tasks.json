@@ -1,0 +1,172 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "mem",
+            "command": "/usr/bin/g++",
+            "args": ["-fdiagnostics-color=always","-g","-c","mem.cpp"],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build"
+            },
+        },
+        {
+            "type": "cppbuild",
+            "label": "cpu",
+            "command": "/usr/bin/g++",
+            "args": ["-fdiagnostics-color=always","-g","-c","cpu.cpp"],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build"
+            },
+        },
+        {
+            "type": "cppbuild",
+            "label": "gpu",
+            "command": "/usr/bin/g++",
+            "args": ["-fdiagnostics-color=always","-g","-c","gpu.cpp"],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build"
+            },
+        },
+        {
+            "type": "cppbuild",
+            "label": "proc",
+            "command": "/usr/bin/g++",
+            "args": ["-fdiagnostics-color=always","-g","-c","proc.cpp"],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+            }
+        },
+        {
+            "type": "cppbuild",
+            "label": "battery",
+            "command": "/usr/bin/g++",
+            "args": ["-fdiagnostics-color=always","-g","-c","battery.cpp"],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+            }
+        },
+        {
+            "type": "cppbuild",
+            "label": "procman",
+            "command": "/usr/bin/g++",
+            "args": ["-fdiagnostics-color=always","-g","-c","procman.cpp"],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+            }
+        },
+        {
+            "type": "cppbuild",
+            "label": "hwman",
+            "command": "/usr/bin/g++",
+            "args": ["-fdiagnostics-color=always","-g","-c","hwman.cpp"],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+            }
+        },
+        {
+            "type": "cppbuild",
+            "label": "main",
+            "command": "/usr/bin/g++",
+            "args": ["-fdiagnostics-color=always","-g","-c","main.cpp"],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+            }
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++ build active file2",
+            "command": "/usr/bin/g++",
+            "args": ["-fdiagnostics-color=always"," -g",
+            "main.o",
+            "mem.o",
+            "cpu.o",
+            "-o main"],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "dependsOn": ["mem","main","cpu"]
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++ build active file",
+            "command": "/usr/bin/g++",
+            "args": ["-fdiagnostics-color=always"," -g",
+            "main.o",
+            "procman.o",
+            "proc.o",
+            "hwman.o",
+            "mem.o",
+            "cpu.o",
+            "gpu.o",
+            "battery.o",
+            "-o","main"],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": ["battery","mem","cpu","gpu","procman","proc","hwman","main"]
+        }
+    ],
+    "version": "2.0.0"
+}

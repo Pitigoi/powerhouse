@@ -10,6 +10,7 @@ private:
 	cpu(const cpu& oth) = delete;
 	cpu& operator=(const cpu& oth) = delete;
 protected:
+friend class hwman;
 	static int id;
 	static char name[100];
 	static float freq;

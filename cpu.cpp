@@ -1,6 +1,15 @@
 #include "cpu.h"
 
+char cpu::name[100]="";
+float cpu::freq=0;
+int cpu::id=0;
+int cpu::cachesize=0;
+
 cpu* cpu::instance = nullptr;
+
+cpu::cpu()
+{
+}
 
 cpu::~cpu()
 {

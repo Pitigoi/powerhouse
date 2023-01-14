@@ -1,18 +1,25 @@
 #include "procman.h"
 
-procman* procman::getInstance()
+procman* procman::instance=nullptr;
+std::set<proc*> procman::set={};
+procman::procman()
+{
+
+}
+
+procman& procman::getInstance()
 {
 	if (instance == nullptr)
 	{
 		instance = new procman;
 	}
-	return instance;
+	return *instance;
 }
 
 proc* procman::operator[](int pid)
 {
 	proc* a = new proc(pid);
-	setpoint i = set.find(a);
+	procpoint i = set.find(a);
 	delete a;
 	if (i == set.end())
 		return nullptr;
@@ -37,7 +44,6 @@ void procman::updateList()
 	case 0: /* child process */
 		close(fd[0]);
 		dup2(fd[1], 1);
-
 		execl("/bin/sh", "sh", "-c", "ps -eo pid | awk '{$1=$1};1' | head -n-4 | tail -n+2", (char*)NULL);
 	}
 
@@ -51,7 +57,7 @@ void procman::updateList()
 	}
 	close(fd[0]);
 	int status;
-	wait(pid, &status);
+	wait(&status);
 
 	for (proc* i : set)
 	{
@@ -59,7 +65,6 @@ void procman::updateList()
 	}
 
 	char* p = strtok(childout, "\n");
-	int pid;
 	do
 	{
 		sscanf(p, "%d", &pid);
@@ -79,4 +84,12 @@ void procman::updateList()
 	}
 
 	//printf("Created process with pid %d\n%s\n", pid, childout);
+}
+
+void procman::print()
+{
+	for(auto a=set.begin();a !=set.end();a++)
+	{
+		printf("%d\t%s\t %f,%f,%f,%f\n",(*a)->pid,(*a)->command,(*a)->cpu_cons,(*a)->gpu_cons,(*a)->mem_cons,(*a)->total_cons);
+	}
 }

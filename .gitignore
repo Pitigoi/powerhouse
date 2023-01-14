@@ -4,3 +4,5 @@ powerhouse.vcxproj
 powerhouse.vcxproj.user
 powerhouse.vcxproj.filters
 .vs/*
+*.o
+main
