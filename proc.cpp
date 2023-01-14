@@ -9,6 +9,8 @@ int proc::populatePid()
 		printf("error : pipe\n");
 
 	int pid2 = fork();
+		char comm[64] ="";
+		sprintf(comm,"ps -p%d", pid);
 	switch (pid2) {
 	case -1: /* fork failed */
 		printf("error : fork\n");
@@ -16,11 +18,8 @@ int proc::populatePid()
 	case 0: /* child process */
 		close(fd[0]);
 		dup2(fd[1], 1);
-		char comm[64] ="";
-		sprintf(comm,"ps -p%d", pid);
 		strcat(comm," -o %cpu,%mem,comm | awk '{$1=$1};1' | tail -n+2");
-		printf("testpipe");
-		execl("/bin/sh", "sh", "-c", comm, (char*)NULL);	//eroare valgrind
+		execl("/bin/sh", "sh", "-c", comm, (char *) NULL);
 		exit(1);
 	}
 
@@ -31,7 +30,6 @@ int proc::populatePid()
 	while (read(fd[0], readingbuf, 1) > 0)
 	{
 		strcat(childout, readingbuf);
-		cpu_cons*=0.45;
 	}
 	close(fd[0]);
 	int status;
@@ -48,6 +46,8 @@ int proc::populatePid()
 	mem_cons*=0.0298;
 	if(GPU::smierr)
 	gpu_cons = hwman::gpucons(pid);
+	total_cons=cpu_cons+mem_cons+gpu_cons;
+	if(total_cons==0)alive=false;
 	//printf("Created process with pid %d\n%s\n", pid2, childout);
 	return 0;
 }

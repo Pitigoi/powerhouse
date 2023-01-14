@@ -5,7 +5,7 @@ int main()
 {
 	int a=12;
 	procman::getInstance().updateList();
-	//procman::print();
+	procman::print();
 
 	return 0;
 }
