@@ -9,17 +9,17 @@ class mem
 {
 private:
 protected:
-	mem();
 	friend class hwman;
 	static int total;
 	char name[100];
 	char type[10];
-	float freq;
+	int freq;
 	int cachesize;
 	float voltage;
 public:
-	static int setTotal();
+	static void setTotal();
 
+	mem();
 	int fillByHandle(char handle[5]);
 };
 

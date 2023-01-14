@@ -1,20 +1,21 @@
 #include "mem.h"
+#include <sys/wait.h>
+
+int mem::total=0;
 
 mem::mem() {
-	total = 0;
 	cachesize = 0;
 	strcpy(name,"");
 	freq = 0;
-	int ;
-	int ;
+	setTotal();
 }
 
-int mem::setTotal()
+void mem::setTotal()
 {
 	FILE* in = fopen("/proc/meminfo", "r");
 	char a[100];
 	fgets(a, 100, in);
-	sscanf(a, "MemTotal:\t\t%d", total); //nr intreg in kb
+	sscanf(a, "MemTotal:\t\t%d", &total); //nr intreg in kb
 	fclose(in);
 }
 
@@ -47,7 +48,7 @@ int mem::fillByHandle(char handle[5])
 	}
 	close(fd[0]);
 	int status;
-	wait(pid, &status);
+	wait(&status);
 
 	char* p;
 
