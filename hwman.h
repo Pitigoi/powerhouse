@@ -27,4 +27,6 @@ public:
 	static float nominalconsCPU();
 	static float nominalconsMEMS();
 	static float nominalconsGPU();
+	static float consCPU();
+	static float consMEMS();
 };
