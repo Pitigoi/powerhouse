@@ -24,4 +24,7 @@ public:
 	static int size;//de mem
 	mem* memory(int index);
 	static float gpucons(int pid);
+	static float nominalconsCPU();
+	static float nominalconsMEMS();
+	static float nominalconsGPU();
 };

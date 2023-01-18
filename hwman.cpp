@@ -6,6 +6,87 @@ GPU* hwman::gpu=new GPU();
 int hwman::size=0;
 std::set<mem*> hwman::mems={};
 hwman* hwman::instance=nullptr;
+
+float hwman::nominalconsCPU() {
+	return 45;
+}
+
+float hwman::nominalconsGPU() {
+	if (GPU::smierr) return 0;
+	return 53;
+}
+
+float hwman::nominalconsMEMS() {
+	return 2.98;
+}
+
+float hwman::consMEMS()
+{
+	int fd[2];
+	if (pipe(fd) < 0)
+		printf("error : pipe\n");
+
+	int pid = fork();
+	switch (pid) {
+	case -1: /* fork failed */
+		printf("error : fork\n");
+		exit(EXIT_FAILURE);
+	case 0: /* child process */
+		close(fd[0]);
+		dup2(fd[1], 1);
+		execl("/bin/sh", "sh", "-c", "top -b -n1 | head -n5 | tail -n1 | awk '{$1=$1};1' | cut -d\" \" -f5-7", (char*)NULL);
+	}
+
+	close(fd[1]);
+
+	char readingbuf[2] = "a";
+	char childout[512] = "";
+	while (read(fd[0], readingbuf, 1) > 0)
+	{
+		strcat(childout, readingbuf);
+	}
+	close(fd[0]);
+	int status;
+	float free,total;
+	wait(&status);
+	sscanf(childout, "%f free, %f", &total ,&free);
+	return (total-free)/total * hwman::nominalconsMEMS();
+}
+
+float hwman::consCPU() {
+	int fd[2];
+	if (pipe(fd) < 0)
+		printf("error : pipe\n");
+
+	int pid = fork();
+	switch (pid) {
+	case -1: /* fork failed */
+		printf("error : fork\n");
+		exit(EXIT_FAILURE);
+	case 0: /* child process */
+		close(fd[0]);
+		dup2(fd[1], 1);
+		execl("/bin/sh", "sh", "-c", "top -b -n1 | head -n3 | tail -n1 | awk '{$1=$1};1' | cut -d\" \" -f8", (char*)NULL);
+	}
+
+	close(fd[1]);
+
+	char readingbuf[2] = "a";
+	char childout[512] = "";
+	while (read(fd[0], readingbuf, 1) > 0)
+	{
+		strcat(childout, readingbuf);
+	}
+	close(fd[0]);
+	int status;
+	float free;
+	wait(&status);
+	sscanf(childout, "%f", &free);
+	return (100 - free) / 100.0 * hwman::nominalconsCPU();
+}
+
+
+
 hwman& hwman::getInstance()
 {
 	if (instance == nullptr)

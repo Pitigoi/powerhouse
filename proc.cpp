@@ -42,8 +42,8 @@ int proc::populatePid()
 	childout[strlen(childout) + 1] = 0;
 	childout[strlen(childout)] = '\n';
 	sscanf(childout, "%f %f %99[^\n]",&cpu_cons,&mem_cons,command);
-	cpu_cons*=0.45;
-	mem_cons*=0.0298;
+	cpu_cons*=hwman::nominalconsCPU()/100.0;
+	mem_cons*= hwman::nominalconsMEMS() / 100.0;
 	if(GPU::smierr)
 	gpu_cons = hwman::gpucons(pid);
 	total_cons=cpu_cons+mem_cons+gpu_cons;

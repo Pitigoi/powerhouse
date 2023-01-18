@@ -43,6 +43,7 @@ void procman::updateList()
 	case 0: /* child process */
 		close(fd[0]);
 		dup2(fd[1], 1);
+		//"ps -eo pid,%cpu | | awk '{$1=$1};1' | tail -n+2 | sort -r -n -k2 | cut -d\" \" -f1 | head -n50"
 		execl("/bin/sh", "sh", "-c", "ps -eo pid | awk '{$1=$1};1' | head -n-4 | tail -n+2", (char*)NULL);
 	}
 
