@@ -17,4 +17,5 @@ Afiseaza un meniu cu 3 optiuni:
 
 //Impartirea codului:
 Ioana: Battery, GPU, main + functii adaugate in celelalte clase marcate intre //Ioana code //
+
 Stefan: cpu, mem, proc, procman, hwman
