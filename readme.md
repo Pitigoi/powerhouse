@@ -1,6 +1,5 @@
 # powerhouse - Process monitoring consumption energy
-David Ioana
-Lăscuzeanu Ștefan 
+David Ioana & Lăscuzeanu Ștefan 
 # Overview program
 Afiseaza un meniu cu 3 optiuni:
 1. Afiseza 50 dintre procesele care consuma cea mai multa energie, cate unul pe linie, in formatul:
