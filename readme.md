@@ -13,3 +13,8 @@ Afiseaza un meniu cu 3 optiuni:
 	NAME - Comanda rulata pentru acest proces<br>
 2. Afiseaza informatiile despre un proces cu PID-ul dat, in acelasi format ca mai sus
 3. Ieșirea din program
+
+
+//Impartirea codului:
+Ioana: Battery, GPU, main + functii adaugate in celelalte clase marcate intre //Ioana code //
+Stefan: cpu, mem, proc, procman, hwman
