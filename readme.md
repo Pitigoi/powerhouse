@@ -16,6 +16,6 @@ Afiseaza un meniu cu 3 optiuni:
 
 
 //Impartirea codului:
-Ioana: Battery, GPU, main + functii adaugate in celelalte clase marcate intre //Ioana code //
+Ioana: Battery, GPU, main + functii adaugate in celelalte clase marcate intre //Ioana code // (logica componentelor si proceselor in relatie cu bateria + logica GPU)
 
-Stefan: cpu, mem, proc, procman, hwman
+Stefan: cpu, mem, proc, procman, hwman (logica proceselor in relatie cu componentele + logica CPU si MEM)
