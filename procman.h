@@ -15,12 +15,13 @@ public:
 	static procman& getInstance();
 	static int size;
 	proc* operator[](int index);
-	static void updateList(float cpu, float gpu, float mem);	//
 	static void print();
-	
 
-	//
+	
+	static void updateList(float cpu, float gpu, float mem);
+	//Ioana
 	std::set<proc*> getList();
 	proc* search_list(int pid);
 	void print_by_pid(int pid);
+	//
 };

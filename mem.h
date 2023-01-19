@@ -17,14 +17,18 @@ protected:
 	int cachesize;
 	float voltage;
 	
+	//Ioana
 	float average;
-	//
 	void setPckWatts();
+	//
 
 public:
 	static void setTotal();
+	
+	//
 	float getAverage();
-
+	//
+	
 	mem();
 	int fillByHandle(char handle[5]);
 };

@@ -38,7 +38,7 @@ int proc::populatePid()
 	int cnt = 0;
 	for (char* p = strchr(childout, '\n'); p != nullptr; p = strchr(p + 1, '\n'))
 		cnt++;
-	//adg un endl pt sscanf
+	
 	childout[strlen(childout) + 1] = 0;
 	childout[strlen(childout)] = '\n';
 	sscanf(childout, "%f %f %99[^\n]",&cpu_cons,&mem_cons,command);
@@ -52,7 +52,12 @@ int proc::populatePid()
 	return 0;
 }
 
-//
+bool operator< (const proc& a, const proc& b)
+{
+	return a.pid<b.pid;
+}
+
+// Ioana
 void proc::setBatcons(float cpu, float gpu, float mem)
 {
 	float c=cpu_cons*cpu/100;
@@ -61,8 +66,4 @@ void proc::setBatcons(float cpu, float gpu, float mem)
 
 	bat_cons=c+g+m;
 }
-
-bool operator< (const proc& a, const proc& b)
-{
-	return a.pid<b.pid;
-}
+//

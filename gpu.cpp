@@ -38,7 +38,6 @@ GPU::GPU()
     if(ok!=0)
     {
         smierr=true;
-        //TO DO LOGGER FAILED TO FETCH LIST OF PROC
     }
     if(!smierr)
         setTotalUsage();
@@ -136,12 +135,12 @@ int GPU::getListOfProcesses()
     int ok = readFromPipe("nvidia-smi | tail +19 | tr -s ' *' ' '", buff);
     if(ok!=0)
     {   
-        //LOGGER
+      
         return -1;
     }
     if(strlen(buff)==0)
     {
-        //LOGGER
+
         free(buff);
         return -2;
     }
@@ -245,14 +244,13 @@ int GPU::readFromPipe(const char *command, char* str)
 
 	if (pipe(fd) < 0)
 		printf("error : pipe\n");
-	// TO DO : LOGGER MARK aand exit
 
 	pid_t pid = fork();
 
 	switch (pid)
 	{
 	case -1:
-		// LOGGER
+		
 		printf("error : pipe\n");
 		return -1;
 	case 0:
@@ -279,7 +277,6 @@ int GPU::readFromPipe(const char *command, char* str)
 	}
 
 }
-
 
 void GPU::erase()
 {

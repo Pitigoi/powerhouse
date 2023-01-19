@@ -50,14 +50,13 @@ int Battery::readFromPipe(const char *command, char* str)
 
 	if (pipe(fd) < 0)
 		printf("error : pipe\n");
-	// TO DO : LOGGER MARK aand exit
+
 
 	pid_t pid = fork();
-	//printf("%d\n", pid);
+
 	switch (pid)
 	{
 	case -1:
-		// LOGGER
 		printf("error : pipe\n");
 		return -1;
 	case 0:
@@ -92,7 +91,6 @@ void Battery::set(float* param, const char* command)
 	int ok = readFromPipe(command, buff);
 	if(ok != 0)
 	{
-		//TO DO: Logger check
 		return;
 	}
 

@@ -27,7 +27,7 @@ protected:
 public:
 	int populatePid();
 
-	//
+	//Ioana
 	float getCpu_cons() {return this->cpu_cons;};
 	float getGpu_cons() {return this->gpu_cons;};
 	float getMem_cons() {return this->mem_cons;};
@@ -35,5 +35,6 @@ public:
 	char* getCommand() {return this->command;};
 	float getBat_cons() {return this->bat_cons;};
 	void setBatcons(float cpu, float gpu, float mem);
+	//
 };
 

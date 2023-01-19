@@ -9,9 +9,11 @@ private:
 
 	cpu(const cpu& oth) = delete;
 	cpu& operator=(const cpu& oth) = delete;
-//
+
+//Ioana:
 	float average_watts;
 	void setPckWatts();
+//
 	
 protected:
 friend class hwman;
@@ -23,8 +25,10 @@ friend class hwman;
 public:
 	~cpu();
 	static cpu* getInstance();
+
+	//Ioana
 	float getWatts();
-	
+	//
 	
 };
 

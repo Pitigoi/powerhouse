@@ -43,30 +43,6 @@ cpu* cpu::getInstance()
 	return instance;
 }
 
-void cpu::setPckWatts()
-{
-	FILE* f= fopen("cpu_pck_wat.txt", "r");
-	float total=0;
-	char line[50];
-	fgets(line, 50, f);
-	for(int i=0;i<9;i++)
-	{
-		fgets(line, 20, f);
-		line[strlen(line)-1] = '\0';
-		total += atof(line);
-	}
-
-	this->average_watts=total/9;
-
-	fclose(f);
-}
-
-float cpu::getWatts()
-{
-	return this->average_watts;
-}
-
-
 
 int cpu::cpuinfo()
 {
@@ -91,3 +67,28 @@ int cpu::cpuinfo()
 	fclose(in);
 	return 0;
 }
+
+//Ioana
+void cpu::setPckWatts()
+{
+	FILE* f= fopen("cpu_pck_wat.txt", "r");
+	float total=0;
+	char line[50];
+	fgets(line, 50, f);
+	for(int i=0;i<9;i++)
+	{
+		fgets(line, 20, f);
+		line[strlen(line)-1] = '\0';
+		total += atof(line);
+	}
+
+	this->average_watts=total/9;
+
+	fclose(f);
+}
+
+float cpu::getWatts()
+{
+	return this->average_watts;
+}
+//

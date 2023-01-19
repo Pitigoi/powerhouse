@@ -80,7 +80,7 @@ void procman::updateList(float cpu, float gpu, float mem)
 		{
 			n=new proc(pids[i]);
 			n->populatePid();
-			n->setBatcons(cpu, gpu, mem);
+			n->setBatcons(cpu, gpu, mem);		//added this line
 			if(n!=nullptr && n->alive)
 				set.insert(n);
 			
@@ -96,12 +96,18 @@ void procman::updateList(float cpu, float gpu, float mem)
 
 }
 
-//
-std::set<proc*> procman::getList()
+
+
+
+void procman::print()	
 {
-	return this->set;
+	for(auto a=set.begin();a !=set.end();a++)
+	{
+		printf("%d\t %f | %f | %f | %f |\t%f |\t%s\n",(*a)->pid,(*a)->cpu_cons,(*a)->gpu_cons,(*a)->mem_cons,(*a)->total_cons,(*a)->bat_cons,(*a)->command);
+	}
 }
 
+//Ioana
 proc* procman::search_list(int pid)
 {
 	for(auto i=set.begin();i !=set.end();i++)
@@ -125,10 +131,10 @@ void procman::print_by_pid(int pid)
 	}
 }
 
-void procman::print()	
+
+std::set<proc*> procman::getList()
 {
-	for(auto a=set.begin();a !=set.end();a++)
-	{
-		printf("%d\t %f | %f | %f | %f |\t%f |\t%s\n",(*a)->pid,(*a)->cpu_cons,(*a)->gpu_cons,(*a)->mem_cons,(*a)->total_cons,(*a)->bat_cons,(*a)->command);
-	}
+	return this->set;
 }
+
+//

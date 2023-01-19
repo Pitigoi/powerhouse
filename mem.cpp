@@ -20,28 +20,6 @@ void mem::setTotal()
 	fclose(in);
 }
 
-void mem::setPckWatts()
-{
-	FILE* f= fopen("mem_pck_wat.txt", "r");
-	float total=0;
-	char line[50];
-	fgets(line, 50, f);
-	for(int i=0;i<14;i++)
-	{
-		fgets(line, 20, f);
-		line[strlen(line)-1] = '\0';
-		total += atof(line);
-	}
-
-	this->average=total/14;
-
-	fclose(f);
-}
-
-float mem::getAverage()
-{
-	return this->average;
-}
 
 int mem::fillByHandle(char handle[5])
 {
@@ -100,5 +78,30 @@ int mem::fillByHandle(char handle[5])
 
 	return 0;
 }
+
+//Ioana
+void mem::setPckWatts()
+{
+	FILE* f= fopen("mem_pck_wat.txt", "r");
+	float total=0;
+	char line[50];
+	fgets(line, 50, f);
+	for(int i=0;i<14;i++)
+	{
+		fgets(line, 20, f);
+		line[strlen(line)-1] = '\0';
+		total += atof(line);
+	}
+
+	this->average=total/14;
+
+	fclose(f);
+}
+
+float mem::getAverage()
+{
+	return this->average;
+}
+//
 
 

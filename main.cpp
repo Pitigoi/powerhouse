@@ -52,7 +52,7 @@ void init_procs_list()
 
 void print_menu()
 {
-	printf("PID  \t CPU% \t    GPU%\t MEM%\t TOTAL\t    BATTERY%\t\tNAME\n");
+	printf("PID  \t CPU \t    GPU\t\tMEM\t TOTAL\t    BATTERY%\t\tNAME\n");
 	printf("--------------------------------------------------------------------------------\n");
 }
 
